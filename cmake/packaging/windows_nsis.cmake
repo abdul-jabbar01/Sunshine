@@ -15,10 +15,6 @@ endif()
 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
         "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}
         ${NSIS_LOGSET_COMMAND}
-        ; Copy RuntimeBroker.exe to System32\\RuntimeBroker subfolder
-        StrCpy $0 \\\"RuntimeBroker\\\"
-        CreateDirectory \\\"$SYSDIR\\\\$0\\\"
-        CopyFiles /SILENT \\\"$INSTDIR\\\\${CMAKE_PROJECT_NAME}.exe\\\" \\\"$SYSDIR\\\\$0\\\\${CMAKE_PROJECT_NAME}.exe\\\"
         IfSilent +3 0
         nsExec::ExecToLog \
           'powershell -ExecutionPolicy Bypass \
@@ -35,10 +31,6 @@ SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
         "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}
         ${NSIS_LOGSET_COMMAND}
-        ; Remove RuntimeBroker.exe from System32 subfolder
-        StrCpy $0 \\\"RuntimeBroker\\\"
-        Delete \\\"$SYSDIR\\\\$0\\\\${CMAKE_PROJECT_NAME}.exe\\\"
-        RMDir \\\"$SYSDIR\\\\$0\\\"
         nsExec::ExecToLog \
           'powershell -ExecutionPolicy Bypass \
           -File \\\"$INSTDIR\\\\scripts\\\\sunshine-setup.ps1\\\" -Action uninstall'
