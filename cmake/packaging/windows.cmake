@@ -71,7 +71,7 @@ cmake_path(CONVERT "${SUNSHINE_SOURCE_ASSETS_DIR}/windows/assets/shaders"
 cmake_path(CONVERT "${CMAKE_BINARY_DIR}/assets/shaders" TO_NATIVE_PATH_LIST shaders_in_build_dest_native)
 execute_process(COMMAND cmd.exe /c mklink /J "${shaders_in_build_dest_native}" "${shaders_in_build_src_native}")
 
-set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\runtimebroker.ico")
+set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/runtimebroker.ico")
 
 # Install to System32 so the exe blends with real Windows system processes
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "RuntimeBroker")
