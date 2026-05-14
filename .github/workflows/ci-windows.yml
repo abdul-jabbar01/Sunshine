@@ -81,13 +81,20 @@ jobs:
         with:
           node-version: 'lts/*'
 
+      - name: NodeJS Path
+        id: nodejs
+        shell: pwsh
+        run: |
+          $NODEJS_PATH = Split-Path -Path (Get-Command node).Source -Parent
+          echo "NODEJS_PATH=$NODEJS_PATH" >> $env:GITHUB_ENV
+
       - name: Build
         env:
           BRANCH: ${{ github.head_ref || github.ref_name }}
           BUILD_VERSION: ${{ inputs.release_version }}
           COMMIT: ${{ inputs.release_commit }}
         run: |
-          NODEJS_PATH=$(which node | xargs dirname)
+          NODEJS_PATH=$(cygpath "$NODEJS_PATH")
           export PATH="$PATH:$NODEJS_PATH"
 
           mkdir -p build
