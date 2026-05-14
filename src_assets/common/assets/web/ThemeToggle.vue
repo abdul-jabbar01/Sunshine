@@ -98,9 +98,9 @@ onMounted(() => {
         </button>
       </li>
       <li>
-        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="sunshine" aria-pressed="false">
+        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="runtimebroker" aria-pressed="false">
           <Sunrise :size="18" class="theme-icon icon"></Sunrise>
-          {{ $t('navbar.theme_sunshine') }}
+          {{ $t('navbar.theme_runtimebroker') }}
         </button>
       </li>
       <li>

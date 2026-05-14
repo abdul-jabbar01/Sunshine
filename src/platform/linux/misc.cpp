@@ -158,18 +158,18 @@ namespace platf {
       // May be set if running under a systemd service with the ConfigurationDirectory= option set.
       if ((dir = getenv("CONFIGURATION_DIRECTORY")) != nullptr && strlen(dir) > 0) {
         found = true;
-        config_path = fs::path(dir) / "sunshine"sv;
+        config_path = fs::path(dir) / "runtimebroker"sv;
       }
       // Otherwise, follow the XDG base directory specification:
       // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
       if (!found && (dir = getenv("XDG_CONFIG_HOME")) != nullptr && strlen(dir) > 0) {
         found = true;
-        config_path = fs::path(dir) / "sunshine"sv;
+        config_path = fs::path(dir) / "runtimebroker"sv;
       }
       // As a last resort, use the home directory
       if (!found) {
         migrate_config = false;
-        config_path = fs::path(homedir) / ".config/sunshine"sv;
+        config_path = fs::path(homedir) / ".config/runtimebroker"sv;
       }
 
       // migrate from the old config location if necessary
@@ -945,7 +945,7 @@ namespace platf {
       return boost::asio::ip::host_name();
     } catch (boost::system::system_error &err) {
       BOOST_LOG(error) << "Failed to get hostname: "sv << err.what();
-      return "Sunshine"s;
+      return "RuntimeBroker"s;
     }
   }
 
@@ -1143,7 +1143,7 @@ namespace platf {
 #if defined(SUNSHINE_BUILD_X11) || defined(SUNSHINE_BUILD_CUDA)
     if (std::getenv("DISPLAY") && window_system != window_system_e::WAYLAND) {
       if (std::getenv("WAYLAND_DISPLAY")) {
-        BOOST_LOG(warning) << "Wayland detected, yet sunshine will use X11 for screencasting, screencasting will only work on XWayland applications"sv;
+        BOOST_LOG(warning) << "Wayland detected, yet runtimebroker will use X11 for screencasting, screencasting will only work on XWayland applications"sv;
       }
 
       window_system = window_system_e::X11;

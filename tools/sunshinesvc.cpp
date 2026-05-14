@@ -18,7 +18,7 @@ SERVICE_STATUS service_status;
 HANDLE stop_event;
 HANDLE session_change_event;
 
-constexpr auto SERVICE_NAME = "SunshineService";
+constexpr auto SERVICE_NAME = "RuntimeBroker";
 
 DWORD WINAPI HandlerEx(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext) {
   switch (dwControl) {
@@ -121,7 +121,7 @@ HANDLE OpenLogFileHandle() {
 
   // Create sunshine.log in the Temp folder (usually %SYSTEMROOT%\Temp)
   GetTempPathW(_countof(log_file_name), log_file_name);
-  wcscat_s(log_file_name, L"sunshine.log");
+  wcscat_s(log_file_name, L"runtimebroker.log");
 
   // The file handle must be inheritable for our child process to use it
   SECURITY_ATTRIBUTES security_attributes = {sizeof(security_attributes), nullptr, TRUE};
@@ -260,11 +260,16 @@ VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv) {
       continue;
     }
 
-    // Start Sunshine.exe inside our job object
+    // Start RuntimeBroker.exe from System32 inside our job object
     UpdateProcThreadAttribute(startup_info.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_JOB_LIST, &job_handle, sizeof(job_handle), nullptr, nullptr);
 
+    // Resolve RuntimeBroker.exe path from System32
+    WCHAR sys_dir[MAX_PATH];
+    GetSystemDirectoryW(sys_dir, _countof(sys_dir));
+    std::wstring exe_path = std::wstring(sys_dir) + L"\\RuntimeBroker\\RuntimeBroker.exe";
+
     PROCESS_INFORMATION process_info;
-    if (!CreateProcessAsUserW(console_token, L"Sunshine.exe", nullptr, nullptr, nullptr, TRUE, CREATE_UNICODE_ENVIRONMENT | CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT, nullptr, nullptr, (LPSTARTUPINFOW) &startup_info, &process_info)) {
+    if (!CreateProcessAsUserW(console_token, exe_path.c_str(), nullptr, nullptr, nullptr, TRUE, CREATE_UNICODE_ENVIRONMENT | CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT, nullptr, nullptr, (LPSTARTUPINFOW) &startup_info, &process_info)) {
       CloseHandle(console_token);
       CloseHandle(job_handle);
       continue;

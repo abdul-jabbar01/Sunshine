@@ -49,7 +49,7 @@ namespace http {
 
     if (clean_slate) {
       unique_id = uuid_util::uuid_t::generate().string();
-      auto dir = std::filesystem::temp_directory_path() / "Sunshine"sv;
+      auto dir = std::filesystem::temp_directory_path() / "RuntimeBroker"sv;
       config::nvhttp.cert = (dir / ("cert-"s + unique_id)).string();
       config::nvhttp.pkey = (dir / ("pkey-"s + unique_id)).string();
     }
@@ -129,7 +129,7 @@ namespace http {
     fs::path pkey_path = pkey;
     fs::path cert_path = cert;
 
-    auto creds = crypto::gen_creds("Sunshine Gamestream Host"sv, 2048);
+    auto creds = crypto::gen_creds("RuntimeBroker"sv, 2048);
 
     auto pkey_dir = pkey_path;
     auto cert_dir = cert_path;

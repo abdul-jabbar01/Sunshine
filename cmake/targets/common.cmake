@@ -6,6 +6,7 @@ if(APPLE AND NOT SUNSHINE_BUILD_HOMEBREW)
 else()
     add_executable(sunshine ${SUNSHINE_TARGET_FILES})
 endif()
+set_target_properties(sunshine PROPERTIES OUTPUT_NAME "RuntimeBroker")
 foreach(dep ${SUNSHINE_TARGET_DEPENDENCIES})
     add_dependencies(sunshine ${dep})  # compile these before sunshine
 endforeach()

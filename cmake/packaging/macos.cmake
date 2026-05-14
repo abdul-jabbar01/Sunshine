@@ -26,7 +26,7 @@ else()
             DESTINATION "${MAC_BUNDLE_CONTENTS}"
             COMPONENT Runtime)
 
-    install(FILES "${PROJECT_SOURCE_DIR}/src_assets/macos/build/sunshine.icns"
+    install(FILES "${PROJECT_SOURCE_DIR}/src_assets/macos/build/runtimebroker.icns"
             DESTINATION "${MAC_BUNDLE_RESOURCES}"
             COMPONENT Runtime)
 
@@ -104,7 +104,7 @@ else()
     # DragNDrop
     set(CPACK_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
     set(CPACK_BUNDLE_PLIST "${APPLE_PLIST_FILE}")
-    set(CPACK_BUNDLE_ICON "${PROJECT_SOURCE_DIR}/src_assets/macos/build/sunshine.icns")
+    set(CPACK_BUNDLE_ICON "${PROJECT_SOURCE_DIR}/src_assets/macos/build/runtimebroker.icns")
     set(CPACK_PACKAGING_INSTALL_PREFIX "/")
     set(CPACK_DMG_BACKGROUND_IMAGE "${PROJECT_SOURCE_DIR}/src_assets/macos/build/sunshine-background-72dpi.jpg")
     set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${PROJECT_SOURCE_DIR}/src_assets/macos/build/dmg-finder-layout.applescript")
