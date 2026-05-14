@@ -49,7 +49,6 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           update: true
-          release: false
           cache: true
           install: >-
             git
