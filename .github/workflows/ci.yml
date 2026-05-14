@@ -14,31 +14,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  github-env:
-    name: GitHub Env Debug
-    permissions:
-      contents: read
-    uses: LizardByte/.github/.github/workflows/__call-github-env.yml@master
-
   release-setup:
     name: Release Setup
     outputs:
       publish_release: ${{ steps.release-setup.outputs.publish_release }}
-      release_body: ${{ steps.release-setup.outputs.release_body }}
       release_commit: ${{ steps.release-setup.outputs.release_commit }}
-      release_generate_release_notes: ${{ steps.release-setup.outputs.release_generate_release_notes }}
-      release_tag: ${{ steps.release-setup.outputs.release_tag }}
       release_version: ${{ steps.release-setup.outputs.release_version }}
     permissions:
       contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Release Setup
         id: release-setup
-        uses: LizardByte/actions/actions/release_setup@4125866b7b655a6fe038b0e22a43a4c5d259af79  # v2026.417.35446
+        uses: LizardByte/actions/actions/release_setup@4125866b7b655a6fe038b0e22a43a4c5d259af79
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,23 +40,6 @@ jobs:
       contents: read
     uses: ./.github/workflows/ci-windows.yml
     with:
-      azure_signing_account: ${{ vars.AZURE_SIGNING_ACCOUNT }}
-      azure_signing_cert_profile: ${{ vars.AZURE_SIGNING_CERT_PROFILE }}
-      azure_signing_endpoint: ${{ vars.AZURE_SIGNING_ENDPOINT }}
       publish_release: ${{ needs.release-setup.outputs.publish_release }}
       release_commit: ${{ needs.release-setup.outputs.release_commit }}
       release_version: ${{ needs.release-setup.outputs.release_version }}
-    secrets:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-
-  bundle-analysis:
-    name: Bundle Analysis
-    needs: release-setup
-    permissions:
-      contents: read
-    uses: ./.github/workflows/ci-bundle.yml
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
