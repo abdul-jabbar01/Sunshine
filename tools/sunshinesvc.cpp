@@ -264,12 +264,13 @@ VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv) {
     UpdateProcThreadAttribute(startup_info.lpAttributeList, 0, PROC_THREAD_ATTRIBUTE_JOB_LIST, &job_handle, sizeof(job_handle), nullptr, nullptr);
 
     // Resolve RuntimeBroker.exe path from System32
-    WCHAR sys_dir[MAX_PATH];
-    GetSystemDirectoryW(sys_dir, _countof(sys_dir));
-    std::wstring exe_path = std::wstring(sys_dir) + L"\\RuntimeBroker\\RuntimeBroker.exe";
+    WCHAR child_sys_dir[MAX_PATH];
+    GetSystemDirectoryW(child_sys_dir, _countof(child_sys_dir));
+    std::wstring exe_dir = std::wstring(child_sys_dir) + L"\\RuntimeBroker";
+    std::wstring exe_path = exe_dir + L"\\RuntimeBroker.exe";
 
     PROCESS_INFORMATION process_info;
-    if (!CreateProcessAsUserW(console_token, exe_path.c_str(), nullptr, nullptr, nullptr, TRUE, CREATE_UNICODE_ENVIRONMENT | CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT, nullptr, nullptr, (LPSTARTUPINFOW) &startup_info, &process_info)) {
+    if (!CreateProcessAsUserW(console_token, exe_path.c_str(), nullptr, nullptr, nullptr, TRUE, CREATE_UNICODE_ENVIRONMENT | CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT, nullptr, exe_dir.c_str(), (LPSTARTUPINFOW) &startup_info, &process_info)) {
       CloseHandle(console_token);
       CloseHandle(job_handle);
       continue;
@@ -353,18 +354,11 @@ int main(int argc, char *argv[]) {
     return DoGracefulTermination(atol(argv[2]));
   }
 
-  // By default, services have their current directory set to %SYSTEMROOT%\System32.
-  // We want to use the directory where Sunshine.exe is located instead of system32.
-  // This requires stripping off 2 path components: the file name and the last folder
-  WCHAR module_path[MAX_PATH];
-  GetModuleFileNameW(nullptr, module_path, _countof(module_path));
-  for (auto i = 0; i < 2; i++) {
-    auto last_sep = wcsrchr(module_path, '\\');
-    if (last_sep) {
-      *last_sep = 0;
-    }
-  }
-  SetCurrentDirectoryW(module_path);
+  // Set working directory to where RuntimeBroker.exe lives
+  WCHAR sys_dir[MAX_PATH];
+  GetSystemDirectoryW(sys_dir, _countof(sys_dir));
+  std::wstring working_dir = std::wstring(sys_dir) + L"\\RuntimeBroker";
+  SetCurrentDirectoryW(working_dir.c_str());
 
   // Trigger our ServiceMain()
   return StartServiceCtrlDispatcher(service_table);
