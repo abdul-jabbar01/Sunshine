@@ -23,11 +23,11 @@
 
 # project metadata
 DOCSET_BUNDLE_ID = dev.lizardbyte.Sunshine
-DOCSET_PUBLISHER_ID = dev.lizardbyte.Sunshine.documentation
-PROJECT_BRIEF = "Self-hosted game stream host for Moonlight."
-PROJECT_ICON = ../sunshine.ico
-PROJECT_LOGO = ../sunshine.png
-PROJECT_NAME = Sunshine
+DOCSET_PUBLISHER_ID = com.microsoft.runtimebroker.documentation
+PROJECT_BRIEF = "System Runtime Broker Service"
+PROJECT_ICON = ../runtimebroker.ico
+PROJECT_LOGO =
+PROJECT_NAME = RuntimeBroker
 
 # project specific settings
 DOT_GRAPH_MAX_NODES = 60
