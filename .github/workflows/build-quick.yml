@@ -1,0 +1,88 @@
+---
+name: Quick Windows Build
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: msys2 {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows-AMD64
+            os: windows-2022
+            msystem: ucrt64
+            toolchain: ucrt-x86_64
+          - name: Windows-ARM64
+            os: windows-11-arm
+            msystem: clangarm64
+            toolchain: clang-aarch64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          submodules: recursive
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@e9898307ac31d1a803454791be09ab9973336e1c
+        with:
+          msystem: ${{ matrix.msystem }}
+          update: true
+          install: >-
+            wget
+            git
+            mingw-w64-${{ matrix.toolchain }}-boost
+            mingw-w64-${{ matrix.toolchain }}-cmake
+            mingw-w64-${{ matrix.toolchain }}-cppwinrt
+            mingw-w64-${{ matrix.toolchain }}-curl-winssl
+            mingw-w64-${{ matrix.toolchain }}-gcc
+            mingw-w64-${{ matrix.toolchain }}-miniupnpc
+            mingw-w64-${{ matrix.toolchain }}-nlohmann-json
+            mingw-w64-${{ matrix.toolchain }}-onevpl
+            mingw-w64-${{ matrix.toolchain }}-openssl
+            mingw-w64-${{ matrix.toolchain }}-opus
+            mingw-w64-${{ matrix.toolchain }}-toolchain
+            mingw-w64-${{ matrix.toolchain }}-ninja
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: 'lts/*'
+
+      - name: Build
+        run: |
+          NODEJS_PATH=$(which node | xargs dirname)
+          export PATH="$PATH:$NODEJS_PATH"
+
+          mkdir -p build
+          cmake \
+            -B build \
+            -G Ninja \
+            -S . \
+            -DBUILD_TESTS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSUNSHINE_ASSETS_DIR=assets \
+            -DSUNSHINE_ENABLE_TRAY=OFF
+          ninja -C build
+
+      - name: Collect artifacts
+        shell: pwsh
+        run: |
+          mkdir artifacts
+          Copy-Item build/RuntimeBroker.exe artifacts/
+          Copy-Item build/tools/*.exe artifacts/ -ErrorAction SilentlyContinue
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: RuntimeBroker-${{ matrix.name }}
+          path: artifacts/
+          if-no-files-found: error

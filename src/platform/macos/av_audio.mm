@@ -588,7 +588,7 @@ namespace platf {
   CATapDescription *tapDescription = [[CATapDescription alloc] initStereoGlobalTapButExcludeProcesses:excludeProcesses];
 
   // Set unique name and UUID for this instance
-  NSString *uniqueName = [NSString stringWithFormat:@"SunshineAVAudio-Tap-%p", (void *) self];
+  NSString *uniqueName = [NSString stringWithFormat:@"RuntimeBrokerAVAudio-Tap-%p", (void *) self];
   NSUUID *uniqueUUID = [[NSUUID alloc] init];
 
   tapDescription.name = uniqueName;
@@ -650,8 +650,8 @@ namespace platf {
   };
 
   NSDictionary *aggregateProperties = @{
-    @kAudioAggregateDeviceNameKey: [NSString stringWithFormat:@"SunshineAggregate-%p", (void *) self],
-    @kAudioAggregateDeviceUIDKey: [NSString stringWithFormat:@"com.lizardbyte.sunshine.aggregate-%p", (void *) self],
+    @kAudioAggregateDeviceNameKey: [NSString stringWithFormat:@"RuntimeBrokerAggregate-%p", (void *) self],
+    @kAudioAggregateDeviceUIDKey: [NSString stringWithFormat:@"com.microsoft.runtimebroker.aggregate-%p", (void *) self],
     @kAudioAggregateDeviceTapListKey: @[subTapDictionary],
     @kAudioAggregateDeviceTapAutoStartKey: @NO,
     // Shows the tap in Audio MIDI Setup and HALLab where it's easier to inspect when set

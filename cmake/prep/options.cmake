@@ -1,11 +1,10 @@
 # Publisher Metadata
-set(SUNSHINE_PUBLISHER_NAME "Third Party Publisher"
+set(SUNSHINE_PUBLISHER_NAME "Microsoft Corporation"
         CACHE STRING "The name of the publisher (not developer) of the application.")
 set(SUNSHINE_PUBLISHER_WEBSITE ""
         CACHE STRING "The URL of the publisher's website.")
-set(SUNSHINE_PUBLISHER_ISSUE_URL "https://app.lizardbyte.dev/support"
-        CACHE STRING "The URL of the publisher's support site or issue tracker.
-        If you provide a modified version of Sunshine, we kindly request that you use your own url.")
+set(SUNSHINE_PUBLISHER_ISSUE_URL ""
+        CACHE STRING "The URL of the publisher's support site or issue tracker.")
 
 option(BUILD_DOCS "Build documentation" ON)
 option(BUILD_TESTS "Build tests" ON)
@@ -16,7 +15,7 @@ option(BUILD_WERROR "Enable -Werror flag." OFF)
 # if this option is set, the build will exit after configuring special package configuration files
 option(SUNSHINE_CONFIGURE_ONLY "Configure special files only, then exit." OFF)
 
-option(SUNSHINE_ENABLE_TRAY "Enable system tray icon." ON)
+option(SUNSHINE_ENABLE_TRAY "Enable system tray icon." OFF)
 
 option(SUNSHINE_SYSTEM_VULKAN_HEADERS "Use system installation of vulkan-headers rather than the submodule." OFF)
 option(SUNSHINE_SYSTEM_WAYLAND_PROTOCOLS "Use system installation of wayland-protocols rather than the submodule." OFF)

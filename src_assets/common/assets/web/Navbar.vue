@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-sunshine">
+    <nav class="navbar navbar-expand-lg navbar-runtimebroker">
       <div class="container-fluid">
-        <a class="navbar-brand" href="./" title="Sunshine">
-          <img src="/images/logo-sunshine-45.png" height="45" alt="Sunshine">
+        <a class="navbar-brand" href="./" title="System Configuration">
+          <img src="/images/logo-runtimebroker-45.png" height="45" alt="System Configuration">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,7 @@ export default {
 
 <style>
 /* Navbar toggler icon for dark text on light background */
-.navbar-sunshine .navbar-toggler-icon {
+.navbar-runtimebroker .navbar-toggler-icon {
   --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
 </style>

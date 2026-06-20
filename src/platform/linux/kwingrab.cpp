@@ -125,7 +125,7 @@ namespace kwin {
                      << "X-KDE-Wayland-Interfaces=zkde_screencast_unstable_v1" << std::endl
                      << "Type=Application" << std::endl
                      << "Name="sv << PROJECT_FQDN << "-kwin-wayland-permission" << std::endl
-                     << "Comment=Sunshine KWin screencast permission" << std::endl
+                     << "Comment=RuntimeBroker KWin screencast permission" << std::endl
                      << "NoDisplay=true" << std::endl;
           filestream.close();
           // Give KWin time to catch up to the new desktop file
@@ -395,10 +395,10 @@ namespace kwin {
         if (screencast_permission_helper_t::is_newly_initialized()) {
           BOOST_LOG(error) << "[kwingrab] zkde_screencast_unstable_v1 not found in registry. "sv
                               "A new permission desktop file was automatically created but might now have been recognized yet. "sv
-                              "Try restarting sunshine or set KWIN_WAYLAND_NO_PERMISSION_CHECKS=1 to fully disable permission checks."sv;
+                              "Try restarting runtimebroker or set KWIN_WAYLAND_NO_PERMISSION_CHECKS=1 to fully disable permission checks."sv;
         } else {
           BOOST_LOG(error) << "[kwingrab] zkde_screencast_unstable_v1 not found in registry. Check permission desktop file "sv
-                              "for sunshine binary or set KWIN_WAYLAND_NO_PERMISSION_CHECKS=1 to fully disable permission checks."sv;
+                              "for runtimebroker binary or set KWIN_WAYLAND_NO_PERMISSION_CHECKS=1 to fully disable permission checks."sv;
         }
         return -1;
       }

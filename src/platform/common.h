@@ -839,7 +839,7 @@ namespace platf {
    */
   platform_caps::caps_t get_capabilities();
 
-  constexpr auto SERVICE_NAME = "Sunshine";
+  constexpr auto SERVICE_NAME = "RuntimeBroker";
   constexpr auto SERVICE_TYPE = "_nvstream._tcp";
 
   namespace publish {

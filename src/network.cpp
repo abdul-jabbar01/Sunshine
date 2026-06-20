@@ -231,6 +231,6 @@ namespace net {
       }
     }
 
-    return !instancename.empty() ? instancename : "Sunshine";
+    return !instancename.empty() ? instancename : "RuntimeBroker";
   }
 }  // namespace net
