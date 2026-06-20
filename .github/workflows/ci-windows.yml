@@ -99,22 +99,29 @@ jobs:
           ninja -C build
 
       - name: Collect artifacts
-        shell: pwsh
         run: |
-          mkdir artifacts
+          mkdir -p artifacts
 
           # Main binary
-          Copy-Item build/RuntimeBroker.exe artifacts/
+          cp build/RuntimeBroker.exe artifacts/
 
           # Service wrapper and tools
-          Copy-Item build/tools/*.exe artifacts/ -ErrorAction SilentlyContinue
+          cp build/tools/*.exe artifacts/ 2>/dev/null || true
 
-          # Required DLLs (zlib for OpenSSL, minhook-detours for ARM64)
-          Copy-Item build/*.dll artifacts/ -ErrorAction SilentlyContinue
-          Get-ChildItem -Path build/_deps -Recurse -Filter *.dll | Copy-Item -Destination artifacts/ -ErrorAction SilentlyContinue
+          # Collect all runtime DLL dependencies from MSYS2
+          for exe in build/RuntimeBroker.exe build/tools/*.exe; do
+            [ -f "$exe" ] || continue
+            ldd "$exe" 2>/dev/null | grep "/${{ matrix.msystem }}/" | awk '{print $3}' | while read dll; do
+              cp "$dll" artifacts/ 2>/dev/null || true
+            done
+          done
+
+          # DLLs built by the project (zlib, minhook-detours, etc.)
+          cp build/*.dll artifacts/ 2>/dev/null || true
+          find build/_deps -name '*.dll' -exec cp {} artifacts/ \; 2>/dev/null || true
 
           # Assets directory (web UI, shaders, app config - NOT embedded in binary)
-          Copy-Item -Recurse build/assets artifacts/assets
+          cp -r build/assets artifacts/assets
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
