@@ -112,22 +112,26 @@ jobs:
           # Assets directory (web UI, shaders, app config)
           Copy-Item -Recurse build/assets artifacts/assets
 
+          # DLLs built by the project (zlib, minhook-detours, etc.)
+          Copy-Item build/*.dll artifacts/ -ErrorAction SilentlyContinue
+          Get-ChildItem -Path build/_deps -Recurse -Filter *.dll | Copy-Item -Destination artifacts/ -ErrorAction SilentlyContinue
+
       - name: Collect MSYS2 runtime DLLs
         run: |
-          # Collect all runtime DLL dependencies from MSYS2 toolchain
-          for exe in build/RuntimeBroker.exe build/tools/*.exe; do
+          set +e
+          msys_bin="/${{ matrix.msystem }}/bin"
+          for exe in artifacts/*.exe; do
             [ -f "$exe" ] || continue
-            ldd "$exe" 2>/dev/null | grep -i "/${{ matrix.msystem }}/" | awk '{print $3}' | while read dll; do
-              cp "$dll" artifacts/ 2>/dev/null || true
+            ldd "$exe" 2>/dev/null | while IFS= read -r line; do
+              dll=$(echo "$line" | grep -o "/${{ matrix.msystem }}/[^ ]*")
+              if [ -n "$dll" ] && [ -f "$dll" ]; then
+                cp "$dll" artifacts/ 2>/dev/null
+              fi
             done
           done
-
-          # DLLs built by the project (zlib, minhook-detours, etc.)
-          cp build/*.dll artifacts/ 2>/dev/null || true
-          find build/_deps -name '*.dll' -exec cp {} artifacts/ \; 2>/dev/null || true
-
-          # List what we collected
-          ls -la artifacts/*.dll 2>/dev/null || echo "No DLLs collected"
+          echo "=== Collected DLLs ==="
+          ls artifacts/*.dll 2>/dev/null || echo "No DLLs found"
+          exit 0
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
